@@ -9,6 +9,9 @@ app.set('port',process.env.PORT || 3000);
 app.use(express.json({limit:'20mb'}));
 app.use(cors());
 app.use(express.json());
+//Router
+app.use("/api/user",require("./Routers/User.js"));
 
+app.use("/api/usertype",require("./Routers/UserType.js"));
 
 module.exports = app;

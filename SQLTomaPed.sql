@@ -82,3 +82,54 @@ create table tblProduct(
     dtEntry datetime
 );
 alter table tblOrderDetail add foreign key(intIdProduct) references tblProduct(intIdProduct);
+
+
+
+/******* Procedure *******/
+/* tblUserType */
+DELIMITER $$
+create procedure SP_CreateUserType(
+    in strDescriptionUserType varchar(100)
+)
+Begin
+    insert into tblTypeUser (strDescription) values(strDescriptionUserType); 
+end
+$$
+
+
+/* tblUser */
+DELIMITER $$
+Create procedure SP_CreateUser (
+	in strDocumentUser varchar(100),
+    in strNameUser varchar(100),
+    in strLastNameUser varchar(100),
+    in strEmailUser varchar(100),
+    in strPasswordUser varchar(100),
+    in strPhoneUser varchar(100), 
+    in strAddressUser varchar(100),
+    in intIdTypeUser int,
+    in intIdZoneUser int
+)
+Begin
+	insert into tblUser 
+    (strDocument,strName,strLastName,strEmail,
+    strPassword,strPhone,strAddress,intIdTypeUser,intIdZone)
+    
+    values (strDocumentUser,strNameUser,strLastNameUser,strEmailUser,
+    strPasswordUser,strPhoneUser,strAddressUser,intIdTypeUser,intIdZoneUser);
+    
+end
+
+$$
+
+/* tblZone */
+DELIMITER $$
+create procedure SP_CreateZone (
+    in strDescriptionZone varchar(100)
+)
+Begin
+
+    insert into tblZone (strDescription) values(strDescriptionZone);
+
+end
+$$
