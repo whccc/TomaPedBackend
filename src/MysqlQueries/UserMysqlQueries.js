@@ -25,8 +25,8 @@ objUserMysqlQueries.CreateUser = async (objUser) => {
                 Connection.query(`
                 CALL SP_CreateUser('${strDocument}','${strName}',
                 '${strLastName}','${strEmail}','${strPassword}',
-                '${strPhone}','${strAddress}',null,
-                null
+                '${strPhone}','${strAddress}',${intIdTypeUser},
+                ${intIdZone}
                 )`, (err, rows) => {
                     //Error
                     if (err) {
