@@ -25,7 +25,7 @@ objCity.CreateCity=async()=>{
     }
 }
 //List cities
-objUsers.ListCities = async (req,res) => {
+objCity.ListCities = async (req,res) => {
     try {
         //Query
         let strDataQuery = await objMysqlQueriesCity.ListCities();
@@ -48,7 +48,7 @@ objUsers.ListCities = async (req,res) => {
     }
 }
 //Edit city
-objUsers.EditCity = async (req, res) => {
+objCity.EditCity = async (req, res) => {
     try { 
         //Queries Mysql
         let blnEstadoQuery = await objMysqlQueriesCity.EditCity(req.body);
