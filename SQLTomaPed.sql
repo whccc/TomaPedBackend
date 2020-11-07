@@ -190,3 +190,29 @@ Begin
 End
 
 $$
+
+
+/* tblcity */
+
+DELIMITER $$
+    create procedure SP_CreateCity(in strDescriptionCity varchar(100),in intIdZoneCity int)
+    Begin
+        insert into tblCity (strDescription,intIdZone) values(strDescriptionCity,intIdZoneCity);
+    end 
+$$
+DELIMITER $$
+    create procedure SP_EditCity(in intIdCityEdit int,in strDescriptionCity varchar(100),in intIdZoneCity int)
+    Begin
+
+        update tblCity set strDescription=strDescriptionCity,intIdZone=intIdZoneCity
+         where tblCity.intIdCity=intIdCityEdit;
+
+    end
+$$
+DELIMITER $$
+    create procedure SP_ListCities()
+    Begin
+        select tblcity.intIdCity,tblcity.strDescription,tblzone.strDescription as 'strDescriptionZone'
+         from tblCity inner join tblZone on tblZone.intIdZone=tblcity.intIdZone;
+    end
+$$
