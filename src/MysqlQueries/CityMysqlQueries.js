@@ -100,4 +100,4 @@ objCityMysqlQueries.EditCity=async(objCity)=>{
         return false;
     }
 }
-module.exports = objUserMysqlQueries;
+module.exports = objCityMysqlQueries;
