@@ -19,6 +19,7 @@ objZone.CreateZone=async(objZone)=>{
                 resolve(rows);
             });
         });
+        Connection.end();
         return blnStateQuery;
     }catch(Error){
       return false;
@@ -42,6 +43,7 @@ objZone.ListZones=async()=>{
         }).then((strData)=>{
             strDataList=strData[0];
         });
+        Connection.end();
         if(blnStateQuery){
             return {Success:true,strData:strDataList};
         }else{

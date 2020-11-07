@@ -45,4 +45,36 @@ objUserMysqlQueries.CreateUser = async (objUser) => {
         return false;
     }
 }
+
+//List user sellers
+objUserMysqlQueries.ListUserSeller = async () => {
+    try {
+        
+        //Connection
+        let Connection=await objMysql.MysqlConnection();
+        let strDataList=[];
+        await new Promise((resolve,reject)=>{
+            Connection.query(`CALL SP_ListSellers()`,(err,rows)=>{
+                if(err){
+                    blnStateQuery=false;
+                    reject();
+                }
+                blnStateQuery=true;
+                resolve(rows);
+            });
+        }).then((strData)=>{
+            strDataList=strData[0];
+        });
+        //Connection close
+        Connection.end();
+
+        if(blnStateQuery){
+            return {Success:true,strData:strDataList};
+        }else{
+            return {Success:false,strData:[]}
+        }
+    } catch (Error) {
+        return {Success:false,strData:[]}
+    }
+}
 module.exports = objUserMysqlQueries;
