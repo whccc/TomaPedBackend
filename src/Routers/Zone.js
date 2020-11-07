@@ -2,10 +2,12 @@ const {Router} = require("express");
 const router = Router();
 
 
-const {CreateZone,ListZones} = require("../Controllers/ZoneController.js");
+const {CreateZone,ListZones,EditZone} = require("../Controllers/ZoneController.js");
 
 router.route("/Create")
        .post(CreateZone);
 router.route("/")
-      .get(ListZones)
+      .get(ListZones);
+router.route("/Edit")
+       .put(EditZone);
  module.exports = router;      

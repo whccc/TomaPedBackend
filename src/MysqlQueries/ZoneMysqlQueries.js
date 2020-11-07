@@ -53,6 +53,37 @@ objZone.ListZones=async()=>{
         return {Success:false,strData:[]}
     }
 }
+//Edit user
+objZone.EditZone=async(objZone)=>{
+    try {
 
+        const {
+            intIdZone,
+            strDescription
+        } = objZone;
+        //Conection Mysql
+        let Connection = await objMysql.MysqlConnection();
 
+        //SP_CreateUser
+        await new Promise(
+            (resolve, reject) => {
+                Connection.query(`
+                CALL SP_EditZone('${intIdZone}','${strDescription}')`, (err, rows) => {
+                    //Error
+                    if (err) {
+                        blnEstadoQuery = false;
+                        reject(err);
+                    }
+                    //Resolve data Mysql
+                    blnEstadoQuery = true;
+                    resolve(rows);
+                })
+            });
+        //Close connection Mysql 
+        Connection.end();    
+        return blnEstadoQuery;
+    } catch (Error) {
+        return false;
+    }
+}
 module.exports=objZone;

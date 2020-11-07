@@ -47,4 +47,27 @@ objZone.ListZones=async(req,res)=>{
         })
     }
 }
+//Edit user seller
+objZone.EditZone = async (req, res) => {
+    try { 
+        //Queries Mysql
+        let blnEstadoQuery = await objZoneMysqlQueries.EditZone(req.body);
+        if (blnEstadoQuery) {
+            res.json({
+                Success: true,
+                strMensaje: "Zone edit with success."
+            });
+        } else {
+            res.json({
+                Success: false,
+                strMensaje: "Error edit a zone."
+            });
+        }
+    } catch (Error) {
+        res.json({
+            Success: false,
+            strMensaje: "Error edit a zone"
+        });
+    }
+}
 module.exports=objZone;

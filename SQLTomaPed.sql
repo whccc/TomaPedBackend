@@ -173,6 +173,15 @@ end
 $$
 
 DELIMITER $$
+create procedure SP_EditZone
+ (in intIdZoneEdit int,
+  in strDescriptionZone varchar(100))
+ Begin
+    update tblZone set strDescription=strDescriptionZone where tblzone.intIdZone=intIdZoneEdit;
+ end
+ $$
+ 
+DELIMITER $$
 create procedure SP_ListZones()
 Begin
 
