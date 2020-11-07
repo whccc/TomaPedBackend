@@ -24,7 +24,33 @@ objZone.CreateZone=async(objZone)=>{
       return false;
     }
 }
-
+//List Zones
+objZone.ListZones=async()=>{
+    try{
+        //Connection
+        let Connection=await objMysql.MysqlConnection();
+        let strDataList=[];
+        await new Promise((resolve,reject)=>{
+            Connection.query(`CALL SP_ListZones()`,(err,rows)=>{
+                if(err){
+                    blnStateQuery=false;
+                    reject();
+                }
+                blnStateQuery=true;
+                resolve(rows);
+            });
+        }).then((strData)=>{
+            strDataList=strData[0];
+        });
+        if(blnStateQuery){
+            return {Success:true,strData:strDataList};
+        }else{
+            return {Success:false,strData:[]}
+        }
+    }catch(Error){
+        return {Success:false,strData:[]}
+    }
+}
 
 
 module.exports=objZone;

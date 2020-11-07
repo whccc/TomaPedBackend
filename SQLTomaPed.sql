@@ -133,3 +133,13 @@ Begin
 
 end
 $$
+
+DELIMITER $$
+create procedure SP_ListZones()
+Begin
+
+    select * from tblZone;
+
+End
+
+$$

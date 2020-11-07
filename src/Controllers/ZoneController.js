@@ -2,7 +2,6 @@ const objZone={};
 const objZoneMysqlQueries = require('../MysqlQueries/ZoneMysqlQueries.js');
  
 //Create zone
-//Create user
 objZone.CreateZone = async (req, res) => {
     try {
         //Queries Mysql
@@ -23,6 +22,29 @@ objZone.CreateZone = async (req, res) => {
             Success: false, 
             strMensaje: "Error creating a Zone"
         });
+    }
+}
+//List Zones
+objZone.ListZones=async(req,res)=>{
+    try{
+        //Query
+        let strDataQuery=await objZoneMysqlQueries.ListZones();
+        if(strDataQuery.Success){
+            res.json({
+                Success:true,
+                strData:strDataQuery.strData
+            });
+        }else{
+            res.json({
+                Success:false,
+                strData:strDataQuery.strData
+            }) 
+        }
+    }catch(Error){
+        res.json({
+            Success:false,
+            strMensaje:"Error list Zones"
+        })
     }
 }
 module.exports=objZone;
