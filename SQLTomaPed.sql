@@ -216,3 +216,13 @@ DELIMITER $$
          from tblCity inner join tblZone on tblZone.intIdZone=tblcity.intIdZone;
     end
 $$
+
+
+/*tblordersate*/
+
+DELIMITER $$
+    create procedure SP_CreateOrderState (in strDescriptionOrderState varchar(100))
+    Begin   
+        insert into tblstateorder(strDescription) values(strDescriptionOrderState);
+    end
+$$

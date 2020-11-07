@@ -19,4 +19,6 @@ app.use("/api/zone",require("./Routers/zone.js"));
 
 app.use("/api/city",require("./Routers/city.js"));
 
+app.use("/api/orderstate",require("./Routers/orderstate.js"));
+
 module.exports = app;

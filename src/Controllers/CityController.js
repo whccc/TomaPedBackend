@@ -2,7 +2,7 @@ const objCity={};
 const objMysqlQueriesCity = require('../MysqlQueries/CityMysqlQueries.js');
 
 //Create city
-objCity.CreateCity=async()=>{
+objCity.CreateCity=async(req,res)=>{
     try { 
         //Queries Mysql
         let blnEstadoQuery = await objMysqlQueriesCity.CreateCity(req.body);
