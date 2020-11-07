@@ -226,3 +226,60 @@ DELIMITER $$
         insert into tblstateorder(strDescription) values(strDescriptionOrderState);
     end
 $$
+
+
+
+/* tblCustomer */
+DELIMITER $$
+Create procedure SP_CreateCustomer (
+	in strDocumentCustomer varchar(100),
+    in strNameCustomer varchar(100),
+    in strLastNameCustomer varchar(100),
+    in strEmailCustomer varchar(100),
+    in strPhoneCustomer varchar(100), 
+    in strAddressCustomer varchar(100),
+    in intIdCityCustomer int
+)
+Begin
+	insert into tblcustomer 
+    (strDocument,strName,strLastName,strEmail
+    ,strPhone,strAddress,intIdCity)
+    values (strDocumentCustomer,strNameCustomer,strLastNameCustomer,strEmailCustomer
+       ,strPhoneCustomer,strAddressCustomer,intIdCityCustomer); 
+end
+$$
+DELIMITER $$
+    create procedure SP_ListCustomers()
+    Begin
+        select 
+			tblcustomer.strDocument,tblcustomer.strName,
+            tblcustomer.strLastName,tblcustomer.strEmail,
+            tblcustomer.strPhone,tblcustomer.strAddress,
+            tblcity.strDescription as 'strDescriptionCity'
+				from tblcustomer inner join tblcity on tblcity.intIdCity=tblcustomer.intIdCity;
+
+    End
+
+$$
+
+DELIMITER $$
+    create procedure SP_EditCustomer(
+        in strDocumentCustomer varchar(100),
+        in strNameCustomer varchar(100),
+        in strLastNameCustomer varchar(100),
+        in strEmailCustomer varchar(100),
+        in strPhoneCustomer varchar(100), 
+        in strAddressCustomer varchar(100),
+        in intIdCityCustomer int
+    )
+    Begin
+    update tblcustomer set strDocument=strDocumentCustomer,
+                        strName=strNameCustomer,
+                        strLastName=strLastName,
+                        strEmail=strEmailCustomer,
+                        strPhone=strPhoneCustomer,
+                        strAddress=strAddressCustomer,
+                        intIdCity=intIdCityCustomer
+                        where tblcustomer.strDocument=strDocumentCustomer;
+    end
+$$

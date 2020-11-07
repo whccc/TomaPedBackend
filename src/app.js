@@ -12,6 +12,8 @@ app.use(express.json());
 //Router
 app.use("/api/user",require("./Routers/User.js"));
 
+app.use("/api/customer",require("./Routers/customer.js"));
+
 app.use("/api/usertype",require("./Routers/UserType.js"));
 
 app.use("/api/zone",require("./Routers/zone.js"));
