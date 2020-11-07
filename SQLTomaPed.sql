@@ -125,9 +125,39 @@ $$
 DELIMITER $$
     create procedure SP_ListSellers()
     Begin
-        select * from tblUser where tblUser.intIdTypeUser=2;
+        select 
+			tbluser.strDocument,tbluser.strName,
+            tbluser.strLastName,tbluser.strEmail,tblUser.strPassword,
+            tbluser.strPhone,tbluser.strAddress,
+            tblzone.strDescription as 'strDescriptionZone'
+				from tblUser inner join tblzone on tblzone.intIdZone=tbluser.intIdZone
+        where tblUser.intIdTypeUser=2;
     End
 
+$$
+
+DELIMITER $$
+    create procedure SP_EditSeller(
+        in strDocumentUser varchar(100),
+        in strNameUser varchar(100),
+        in strLastNameUser varchar(100),
+        in strEmailUser varchar(100),
+        in strPasswordUser varchar(100),
+        in strPhoneUser varchar(100), 
+        in strAddressUser varchar(100),
+        in intIdZoneUser int
+    )
+    Begin
+    update tblUser set strDocument=strDocumentUser,
+                        strName=strNameUser,
+                        strLastName=strLastName,
+                        strEmail=strEmailUser,
+                        strPassword=strPasswordUser,
+                        strPhone=strPhoneUser,
+                        strAddress=strAddressUser,
+                        intIdZone=intIdZoneUser
+                        where tbluser.strDocument=strDocumentUser;
+    end
 $$
 
 /* tblZone */

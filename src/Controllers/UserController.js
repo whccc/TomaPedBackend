@@ -2,7 +2,7 @@ const objUsers = {};
 const objMysqlQueriesUser = require('../MysqlQueries/UserMysqlQueries.js');
 //Create user
 objUsers.CreateUser = async (req, res) => {
-    try {
+    try { 
         //Queries Mysql
         let blnEstadoQuery = await objMysqlQueriesUser.CreateUser(req.body);
         if (blnEstadoQuery) {
@@ -44,6 +44,29 @@ objUsers.ListUserSeller = async (req,res) => {
             Success: false,
             strMensaje: "Error list sellers"
         })
+    }
+}
+//Edit user seller
+objUsers.EditUserSeller = async (req, res) => {
+    try { 
+        //Queries Mysql
+        let blnEstadoQuery = await objMysqlQueriesUser.EditUserSeller(req.body);
+        if (blnEstadoQuery) {
+            res.json({
+                Success: true,
+                strMensaje: "User edit with success."
+            });
+        } else {
+            res.json({
+                Success: false,
+                strMensaje: "Error edit a user."
+            });
+        }
+    } catch (Error) {
+        res.json({
+            Success: false,
+            strMensaje: "Error edit a user"
+        });
     }
 }
 module.exports = objUsers;
