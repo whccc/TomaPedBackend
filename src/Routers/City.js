@@ -1,10 +1,14 @@
-const {Router} = require("express");
+const { Router } = require("express");
 const router = Router();
 
 
-const {CreateCity} = require("../Controllers/CityController.js");
+const { CreateCity,ListCities,EditCity } = require("../Controllers/CityController.js");
 
 router.route("/Create")
-       .post(CreateCity);
-      
- module.exports = router; 
+      .post(CreateCity);
+router.route("/")
+      .get(ListCities);
+router.route("/Edit")
+      .put(EditCity);
+
+module.exports = router; 
