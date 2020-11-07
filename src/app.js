@@ -17,6 +17,6 @@ app.use("/api/usertype",require("./Routers/UserType.js"));
 app.use("/api/zone",require("./Routers/zone.js"));
 
 
-app.use("/api/cty",require("./Routers/city.js"));
+app.use("/api/city",require("./Routers/city.js"));
 
 module.exports = app;
