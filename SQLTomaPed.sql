@@ -122,6 +122,14 @@ end
 
 $$
 
+DELIMITER $$
+    create procedure SP_ListSellers()
+    Begin
+        select * from tblUser where tblUser.intIdTypeUser=2;
+    End
+
+$$
+
 /* tblZone */
 DELIMITER $$
 create procedure SP_CreateZone (
