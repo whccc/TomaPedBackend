@@ -283,3 +283,25 @@ DELIMITER $$
                         where tblcustomer.strDocument=strDocumentCustomer;
     end
 $$
+
+
+/* Login */
+DELIMITER $$
+    create procedure SP_Login(in strDocument varchar(100),in strPassword varchar(100))
+        begin
+	declare blnLogin varchar(20) default true;
+    declare DataConsult varchar(20);
+    set DataConsult=(select tbluser.strDocument from tbluser
+    where tbluser.strDocument=strDocumentLogin and tbluser.strPassword=strPasswordLogin limit 1) ;
+    if isnull(DataConsult) then
+		set blnLogin=false;
+		select blnLogin;
+     else
+            select blnLogin,tbluser.strDocument,tbluser.strName,tbluser.strLastName,
+           tbluser.strEmail,tbluser.strPhone,tbluser.strAddress,tbluser.intIdZone,tbluser.intIdTypeUser,
+           tbltypeuser.strdescription as 'strDescriptionTypeUser'
+           from tbluser inner join  tbltypeuser on tbluser.intidtypeuser=tbltypeuser.intIdtypeuser
+           where tbluser.strDocument=strDocumentLogin and tbluser.strPassword=strPasswordLogin limit 1;
+     end if;
+end
+$$
