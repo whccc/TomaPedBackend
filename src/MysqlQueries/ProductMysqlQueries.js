@@ -1,59 +1,59 @@
-const objProductMysql ={};
+const objProductMysql = {};
 const objMysql = require('../ConectionDatabases/DBConectionMysql.js');
 const objProduct = require('../Controllers/ProductController.js');
 
 //Create product
-objProductMysql.CreateProduct=async(objProduct)=>{
-    try{
+objProductMysql.CreateProduct = async (objProduct) => {
+    try {
         const {
             intIdProduct,
             strDescription,
             strPrice
         } = objProduct;
         //Connection
-        let Connection=await objMysql.MysqlConnection();
-        await new Promise((resolve,reject)=>{
+        let Connection = await objMysql.MysqlConnection();
+        await new Promise((resolve, reject) => {
             Connection.query(`CALL SP_CreateProduct('${intIdProduct}','${strDescription}','${strPrice}')`,
-            (err,rows)=>{
-                if(err){
-                    reject(err);
-                }
-                resolve(rows);
-            });
+                (err, rows) => {
+                    if (err) {
+                        reject(err);
+                    }
+                    resolve(rows);
+                });
             Connection.end();
         });
-    }catch(Error){
+    } catch (Error) {
         console.log(Error)
     }
 }
 
 
 //List Products
-objProductMysql.ListProducts=async()=>{
-    try{
+objProductMysql.ListProducts = async () => {
+    try {
         //Connection
-        let Connection=await objMysql.MysqlConnection();
-        let strDataList=[];
-        await new Promise((resolve,reject)=>{
-            Connection.query(`CALL SP_ListProducts()`,(err,rows)=>{
-                if(err){
+        let Connection = await objMysql.MysqlConnection();
+        let strDataList = [];
+        await new Promise((resolve, reject) => {
+            Connection.query(`CALL SP_ListProducts()`, (err, rows) => {
+                if (err) {
                     reject();
                 }
                 resolve(rows);
             });
-        }).then((strData)=>{
-            strDataList=strData[0];
+        }).then((strData) => {
+            strDataList = strData[0];
         });
         Connection.end();
-        
-         return {strData:strDataList}
-        
-    }catch(Error){
+
+        return { strData: strDataList }
+
+    } catch (Error) {
         console.log(Error)
     }
 }
 //Edit product
-objProductMysql.EditProduct=async(objProduct)=>{
+objProductMysql.EditProduct = async (objProduct) => {
     try {
 
         const {
@@ -79,9 +79,36 @@ objProductMysql.EditProduct=async(objProduct)=>{
                 })
             });
         //Close connection Mysql 
-        Connection.end();    
+        Connection.end();
     } catch (Error) {
         return false;
     }
 }
-module.exports=objProductMysql;
+//GetProduct
+objProductMysql.GetProduct = async(intIdProduct) => {
+    try {
+        //Conection Mysql
+        let Connection = await objMysql.MysqlConnection();
+        let strData=null;
+        //SP_CreateUser
+        await new Promise(
+            (resolve, reject) => {
+                Connection.query(`
+                    CALL SP_GetProduct('${intIdProduct}')`, (err, rows) => {
+                    //Error
+                    if (err) {
+                        reject(err);
+                    }
+                    //Resolve data Mysql
+                    strData=rows[0][0];
+                    resolve(rows);
+                })
+            });
+        //Close connection Mysql 
+        Connection.end();
+        return strData;
+    } catch (Error) {
+        console.log(Error);
+    }
+}
+module.exports = objProductMysql;

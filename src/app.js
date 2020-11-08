@@ -23,6 +23,8 @@ app.use("/api/product",require("./Routers/product.js"));
 
 app.use("/api/login",require("./Routers/login.js"));
 
+app.use("/api/order",require("./Routers/order.js"));
+
 app.use("/api/city",require("./Routers/city.js"));
 
 app.use("/api/orderstate",require("./Routers/orderstate.js"));

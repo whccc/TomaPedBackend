@@ -47,6 +47,18 @@ objProduct.EditProduct = async (req, res) => {
        console.log(Error)
     }
 }
+//Get product
+objProduct.GetProduct=async(req,res)=>{
+    try{
+        let strDataProduct=await objMysqlQueriesProduct.GetProduct(req.params.strCode);
+        strDataProduct.Success=true;
+        res.json(
+            strDataProduct
+        )
+    }catch(Error){
+        console.log(Error)
+    }
+}
 //Get img
 objProduct.GetArchivo = async (req, res) => {
     try {

@@ -345,3 +345,32 @@ DELIMITER $$
 
 
 $$
+DELIMITER $$
+    create procedure SP_GetProduct(in intIdProductSearch varchar(100))
+    begin
+         select tblproduct.intIdProduct,
+         tblproduct.strDescription,tblproduct.strPrice from tblproduct
+         where tblproduct.intIdProduct=intIdProductSearch;
+    end
+$$
+/*******TBLORDER********/
+DELIMITER $$
+    create procedure SP_CreateOrder(in strDocumentSeller varchar(100),in strDocumentCustomer varchar(100))
+     begin
+        insert into tblorder(dtFechaInicio,intNumeroItems,strDescription,intIdCustomer,intIdUser,intIdStateOrder)
+        values (now(),0,'',
+        (select tblcustomer.intIdCustomer from tblcustomer where tblcustomer.strDocument=strDocumentCustomer),
+        (select tbluser.intIdUser from tbluser where tbluser.strDocument=strDocumentSeller),2);
+        
+        select  tblorder.intIdOrder from tblorder order by  tblorder.intIdOrder desc limit 1;
+    end
+$$
+
+DELIMITER $$
+    create procedure SP_FinalOrder(in intIdOrderUpdate int)
+
+    begin
+        update tblorder set tblorder.intIdStateOrder=3 where tblorder.intIdOrder=intIdOrderUpdate;
+    end
+
+$$
