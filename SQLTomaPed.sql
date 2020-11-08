@@ -305,3 +305,43 @@ DELIMITER $$
      end if;
 end
 $$
+
+/*tblproduct*/
+DELIMITER $$
+    create procedure SP_CreateProduct(in strIdProduct varchar(100),in strDescriptionProduct varchar(100),
+    in intPriceProduct int)
+    begin
+
+        insert into tblProduct(intIdProduct,strDescription,strPrice,dtEntry) values(strIdProduct,
+        strDescriptionProduct,intPriceProduct,now());
+
+    end
+
+
+$$
+
+DELIMITER $$
+    create procedure SP_ListProducts()
+
+    begin
+             select tblproduct.intIdProduct,
+        tblproduct.strDescription,tblproduct.strPrice,SUBSTRING_INDEX(tblproduct.dtEntry,' ',1) as 'dtEntry' from tblproduct;
+
+    end
+
+
+$$
+
+DELIMITER $$
+    create procedure SP_EditProduct(in intIdProductEdit varchar(100),
+    in strDescriptionProduct varchar(100),in strPriceProduct varchar(100))
+
+    begin
+
+        update tblproduct set strDescription=strDescriptionProduct,strPrice=strPriceProduct
+        where tblproduct.intIdProduct=intIdProductEdit;
+
+    end
+
+
+$$
