@@ -129,7 +129,8 @@ DELIMITER $$
 			tbluser.strDocument,tbluser.strName,
             tbluser.strLastName,tbluser.strEmail,tblUser.strPassword,
             tbluser.strPhone,tbluser.strAddress,
-            tblzone.strDescription as 'strDescriptionZone'
+            tblzone.strDescription as 'strDescriptionZone',
+            (select count(*) from tblorder where tblorder.intIdUser=tbluser.intIdUser) as 'NroPedidos'
 				from tblUser inner join tblzone on tblzone.intIdZone=tbluser.intIdZone
         where tblUser.intIdTypeUser=2;
     End
@@ -371,6 +372,30 @@ DELIMITER $$
 
     begin
         update tblorder set tblorder.intIdStateOrder=3 where tblorder.intIdOrder=intIdOrderUpdate;
+    end
+
+$$
+
+DELIMITER $$
+    create procedure SP_CreateDetailOrder
+    (in intQuantityOrder int,in intTotalOrder int,
+    in intPriceProduct int, in intIdProductOrder varchar(100),
+    in intIdOrderP int)
+    begin
+
+        insert into tblorderdetail(intQuantity,intTotal,intPriceProduct,intIdProduct,intIdOrder)
+        values(intQuantityOrder,intTotalOrder,intPriceProduct,intIdProductOrder,intIdOrderP);
+
+    end
+$$
+
+/*Generañ*/
+DELIMITER $$
+    create procedure SP_NroUserCustomerOrder()
+    begin
+
+        select (select count(*) from tbluser) as 'NroUsers',(select count(*) from tblcustomer) as 'NroCustomers',
+(select count(*) from tblorder) as 'NroOrders';
     end
 
 $$

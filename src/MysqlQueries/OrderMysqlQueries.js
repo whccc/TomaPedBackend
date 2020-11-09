@@ -54,4 +54,32 @@ objOrder.FinalizeOrder=async(objOrder)=>{
         console.log(Error)
     }
 }
+//CreateDetail
+objOrder.CreateDetail=async(objOrderDetail)=>{
+    try{
+        const { 
+            intQuantityOrder,
+            intTotalOrder,
+            intPriceProduct,
+            intIdProductOrder,
+            intIdOrderP
+        }=objOrderDetail;
+        //Connection
+        let Connection=await objMysql.MysqlConnection();
+        await new Promise((resolve,reject)=>{
+            Connection.query(`CALL SP_CreateDetailOrder('${intQuantityOrder}','${intTotalOrder}',
+            '${intPriceProduct}','${intIdProductOrder}','${intIdOrderP}')`,
+            (err,rows)=>{
+                if(err){
+                    console.log(err)
+                    reject(err);
+                }
+                resolve(rows);
+            });
+        });
+        Connection.end();
+    }catch(Error){
+        console.log(Error);
+    }
+}
 module.exports=objOrder;

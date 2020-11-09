@@ -69,4 +69,16 @@ objUsers.EditUserSeller = async (req, res) => {
         });
     }
 }
+objUsers.GetNroUsers = async (req,res) => {
+    try {
+        //Query
+        let strDataQuery = await objMysqlQueriesUser.GetNroUsers();
+        res.json({
+            Success: true,
+            strData: strDataQuery.strData
+        });
+    } catch (Error) {
+        console.log(Error)
+    }
+}
 module.exports = objUsers;

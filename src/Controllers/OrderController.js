@@ -26,7 +26,21 @@ objOrder.FinalizeOrder=async(req,res)=>{
         console.log(Error)
     }
 }
+//Create detail
+objOrder.CreateDetail=async(req,res)=>{
+    try{
+        
 
+        await OrderMysql.CreateDetail(req.body);
+        res.json({
+            Success:true,
+            strMensaje:"Detail add with success"
+        })
+
+    }catch(Error){
+        console.log(Error)
+    }
+}
 
 
 module.exports=objOrder;

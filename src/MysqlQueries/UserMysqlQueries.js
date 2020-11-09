@@ -119,4 +119,31 @@ objUserMysqlQueries.EditUserSeller=async(objUser)=>{
         return false;
     }
 }
+
+//List user sellers
+objUserMysqlQueries.GetNroUsers = async () => {
+    try {
+        
+        //Connection
+        let Connection=await objMysql.MysqlConnection();
+        let strDataList=[];
+        await new Promise((resolve,reject)=>{
+            Connection.query(`CALL SP_NroUserCustomerOrder()`,(err,rows)=>{
+                if(err){
+                    blnStateQuery=false;
+                    reject();
+                }
+                blnStateQuery=true;
+                resolve(rows);
+            });
+        }).then((strData)=>{
+            strDataList=strData[0];
+        });
+        //Connection close
+        Connection.end();
+        return {Success:true,strData:strDataList};    
+    } catch (Error) {
+       console.log(Error)
+    }
+}
 module.exports = objUserMysqlQueries;
