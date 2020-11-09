@@ -41,6 +41,18 @@ objOrder.CreateDetail=async(req,res)=>{
         console.log(Error)
     }
 }
+objOrder.ListOrders=async(req,res)=>{
+    try{
+        let strData=await OrderMysql.ListOrders();
+        
+        res.json({
+            Success:true,
+            strData
+        })
 
+    }catch(Error){
+        console.log(Error);
+    }
+}
 
 module.exports=objOrder;

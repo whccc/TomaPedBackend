@@ -389,6 +389,18 @@ DELIMITER $$
     end
 $$
 
+DELIMITER $$
+create procedure SP_ListOrdes
+()
+begin
+ SELECT tblorder.intIdOrder,SUBSTRING_INDEX(tblorder.dtFechaInicio,' ',1) as 'dtFechaInicio',
+    concat(tbluser.strName,tbluser.strLastName) as 'strNameSeller',
+concat(tblcustomer.strName,tblcustomer.strLastName) as 'strNameCustomer' FROM tomaped.tblorder
+inner join tbluser on tbluser.intiduser=tblorder.intiduser
+inner join tblcustomer on tblcustomer.intIdCustomer=tblorder.intIdCustomer;
+End
+$$
+
 /*Generañ*/
 DELIMITER $$
     create procedure SP_NroUserCustomerOrder()

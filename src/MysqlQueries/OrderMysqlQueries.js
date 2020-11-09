@@ -36,7 +36,6 @@ objOrder.FinalizeOrder=async(objOrder)=>{
         const { 
             intIdOrder
         }=objOrder;
-        let strDataOrder=null;
         //Connection
         let Connection=await objMysql.MysqlConnection();
         await new Promise((resolve,reject)=>{
@@ -49,7 +48,7 @@ objOrder.FinalizeOrder=async(objOrder)=>{
                 resolve(rows);
             });
         });
-        connection.end();
+        Connection.end();
     }catch(Error){
         console.log(Error)
     }
@@ -79,6 +78,33 @@ objOrder.CreateDetail=async(objOrderDetail)=>{
         });
         Connection.end();
     }catch(Error){
+        console.log(Error);
+    }
+}
+//GetProduct
+objOrder.ListOrders = async() => {
+    try {
+        //Conection Mysql
+        let Connection = await objMysql.MysqlConnection();
+        let strData=[];
+        //SP_CreateUser
+        await new Promise(
+            (resolve, reject) => {
+                Connection.query(`
+                    CALL SP_ListOrdes()`, (err, rows) => {
+                    //Error
+                    if (err) {
+                        reject(err);
+                    }
+                    //Resolve data Mysql
+                    strData=rows[0];
+                    resolve(rows);
+                })
+            });
+        //Close connection Mysql 
+        Connection.end();
+        return strData;
+    } catch (Error) {
         console.log(Error);
     }
 }
