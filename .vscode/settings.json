@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/6ed95503-60eb-47c9-aa2b-44647b99e020/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/tomapedapi",
+    "appService.deploySubpath": "."
+}
