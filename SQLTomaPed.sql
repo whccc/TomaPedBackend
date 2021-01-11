@@ -126,12 +126,12 @@ DELIMITER $$
     create procedure SP_ListSellers()
     Begin
         select 
-			tbluser.strDocument,tbluser.strName,
-            tbluser.strLastName,tbluser.strEmail,tblUser.strPassword,
-            tbluser.strPhone,tbluser.strAddress,
-            tblzone.strDescription as 'strDescriptionZone',
-            (select count(*) from tblorder where tblorder.intIdUser=tbluser.intIdUser) as 'NroPedidos'
-				from tblUser inner join tblzone on tblzone.intIdZone=tbluser.intIdZone
+			tblUser.strDocument,tblUser.strName,
+            tblUser.strLastName,tblUser.strEmail,tblUser.strPassword,
+            tblUser.strPhone,tblUser.strAddress,
+            tblZone.strDescription as 'strDescriptionZone',
+            (select count(*) from tblOrder where tblOrder.intIdUser=tblUser.intIdUser) as 'NroPedidos'
+				from tblUser inner join tblZone on tblZone.intIdZone=tblUser.intIdZone
         where tblUser.intIdTypeUser=2;
     End
 
@@ -157,7 +157,7 @@ DELIMITER $$
                         strPhone=strPhoneUser,
                         strAddress=strAddressUser,
                         intIdZone=intIdZoneUser
-                        where tbluser.strDocument=strDocumentUser;
+                        where tblUser.strDocument=strDocumentUser;
     end
 $$
 
@@ -178,7 +178,7 @@ create procedure SP_EditZone
  (in intIdZoneEdit int,
   in strDescriptionZone varchar(100))
  Begin
-    update tblZone set strDescription=strDescriptionZone where tblzone.intIdZone=intIdZoneEdit;
+    update tblZone set strDescription=strDescriptionZone where tblZone.intIdZone=intIdZoneEdit;
  end
  $$
  
@@ -213,8 +213,8 @@ $$
 DELIMITER $$
     create procedure SP_ListCities()
     Begin
-        select tblcity.intIdCity,tblcity.strDescription,tblzone.strDescription as 'strDescriptionZone'
-         from tblCity inner join tblZone on tblZone.intIdZone=tblcity.intIdZone;
+        select tblCity.intIdCity,tblCity.strDescription,tblZone.strDescription as 'strDescriptionZone'
+         from tblCity inner join tblZone on tblZone.intIdZone=tblCity.intIdZone;
     end
 $$
 
@@ -224,7 +224,7 @@ $$
 DELIMITER $$
     create procedure SP_CreateOrderState (in strDescriptionOrderState varchar(100))
     Begin   
-        insert into tblstateorder(strDescription) values(strDescriptionOrderState);
+        insert into tblStateOrder(strDescription) values(strDescriptionOrderState);
     end
 $$
 
@@ -242,7 +242,7 @@ Create procedure SP_CreateCustomer (
     in intIdCityCustomer int
 )
 Begin
-	insert into tblcustomer 
+	insert into tblCustomer 
     (strDocument,strName,strLastName,strEmail
     ,strPhone,strAddress,intIdCity)
     values (strDocumentCustomer,strNameCustomer,strLastNameCustomer,strEmailCustomer
@@ -253,11 +253,11 @@ DELIMITER $$
     create procedure SP_ListCustomers()
     Begin
         select 
-			tblcustomer.strDocument,tblcustomer.strName,
-            tblcustomer.strLastName,tblcustomer.strEmail,
-            tblcustomer.strPhone,tblcustomer.strAddress,
-            tblcity.strDescription as 'strDescriptionCity'
-				from tblcustomer inner join tblcity on tblcity.intIdCity=tblcustomer.intIdCity;
+			tblCustomer.strDocument,tblCustomer.strName,
+            tblCustomer.strLastName,tblCustomer.strEmail,
+            tblCustomer.strPhone,tblCustomer.strAddress,
+            tblCity.strDescription as 'strDescriptionCity'
+				from tblCustomer inner join tblCity on tblCity.intIdCity=tblCustomer.intIdCity;
 
     End
 
@@ -274,35 +274,35 @@ DELIMITER $$
         in intIdCityCustomer int
     )
     Begin
-    update tblcustomer set strDocument=strDocumentCustomer,
+    update tblCustomer set strDocument=strDocumentCustomer,
                         strName=strNameCustomer,
                         strLastName=strLastName,
                         strEmail=strEmailCustomer,
                         strPhone=strPhoneCustomer,
                         strAddress=strAddressCustomer,
                         intIdCity=intIdCityCustomer
-                        where tblcustomer.strDocument=strDocumentCustomer;
+                        where tblCustomer.strDocument=strDocumentCustomer;
     end
 $$
 
 
 /* Login */
 DELIMITER $$
-    create procedure SP_Login(in strDocument varchar(100),in strPassword varchar(100))
+    create procedure SP_Login(in strDocumentLogin varchar(100),in strPasswordLogin varchar(100))
         begin
 	declare blnLogin varchar(20) default true;
     declare DataConsult varchar(20);
-    set DataConsult=(select tbluser.strDocument from tbluser
-    where tbluser.strDocument=strDocumentLogin and tbluser.strPassword=strPasswordLogin limit 1) ;
+    set DataConsult=(select tblUser.strDocument from tblUser
+    where tblUser.strDocument=strDocumentLogin and tblUser.strPassword=strPasswordLogin limit 1) ;
     if isnull(DataConsult) then
 		set blnLogin=false;
 		select blnLogin;
      else
-            select blnLogin,tbluser.strDocument,tbluser.strName,tbluser.strLastName,
-           tbluser.strEmail,tbluser.strPhone,tbluser.strAddress,tbluser.intIdZone,tbluser.intIdTypeUser,
-           tbltypeuser.strdescription as 'strDescriptionTypeUser'
-           from tbluser inner join  tbltypeuser on tbluser.intidtypeuser=tbltypeuser.intIdtypeuser
-           where tbluser.strDocument=strDocumentLogin and tbluser.strPassword=strPasswordLogin limit 1;
+            select blnLogin,tblUser.strDocument,tblUser.strName,tblUser.strLastName,
+           tblUser.strEmail,tblUser.strPhone,tblUser.strAddress,tblUser.intIdZone,tblUser.intIdTypeUser,
+           tblTypeUser.strdescription as 'strDescriptionTypeUser'
+           from tblUser inner join  tblTypeUser on tblUser.intidtypeuser=tblTypeUser.intIdtypeuser
+           where tblUser.strDocument=strDocumentLogin and tblUser.strPassword=strPasswordLogin limit 1;
      end if;
 end
 $$
@@ -325,8 +325,8 @@ DELIMITER $$
     create procedure SP_ListProducts()
 
     begin
-             select tblproduct.intIdProduct,
-        tblproduct.strDescription,tblproduct.strPrice,SUBSTRING_INDEX(tblproduct.dtEntry,' ',1) as 'dtEntry' from tblproduct;
+             select tblProduct.intIdProduct,
+        tblProduct.strDescription,tblProduct.strPrice,SUBSTRING_INDEX(tblProduct.dtEntry,' ',1) as 'dtEntry' from tblProduct;
 
     end
 
@@ -339,8 +339,8 @@ DELIMITER $$
 
     begin
 
-        update tblproduct set strDescription=strDescriptionProduct,strPrice=strPriceProduct
-        where tblproduct.intIdProduct=intIdProductEdit;
+        update tblProduct set strDescription=strDescriptionProduct,strPrice=strPriceProduct
+        where tblProduct.intIdProduct=intIdProductEdit;
 
     end
 
@@ -349,21 +349,21 @@ $$
 DELIMITER $$
     create procedure SP_GetProduct(in intIdProductSearch varchar(100))
     begin
-         select tblproduct.intIdProduct,
-         tblproduct.strDescription,tblproduct.strPrice from tblproduct
-         where tblproduct.intIdProduct=intIdProductSearch;
+         select tblProduct.intIdProduct,
+         tblProduct.strDescription,tblProduct.strPrice from tblProduct
+         where tblProduct.intIdProduct=intIdProductSearch;
     end
 $$
 /*******TBLORDER********/
 DELIMITER $$
     create procedure SP_CreateOrder(in strDocumentSeller varchar(100),in strDocumentCustomer varchar(100))
      begin
-        insert into tblorder(dtFechaInicio,intNumeroItems,strDescription,intIdCustomer,intIdUser,intIdStateOrder)
+        insert into tblOrder(dtFechaInicio,intNumeroItems,strDescription,intIdCustomer,intIdUser,intIdStateOrder)
         values (now(),0,'',
-        (select tblcustomer.intIdCustomer from tblcustomer where tblcustomer.strDocument=strDocumentCustomer),
-        (select tbluser.intIdUser from tbluser where tbluser.strDocument=strDocumentSeller),2);
+        (select tblCustomer.intIdCustomer from tblCustomer where tblCustomer.strDocument=strDocumentCustomer),
+        (select tblUser.intIdUser from tblUser where tblUser.strDocument=strDocumentSeller),2);
         
-        select  tblorder.intIdOrder from tblorder order by  tblorder.intIdOrder desc limit 1;
+        select  tblOrder.intIdOrder from tblOrder order by  tblOrder.intIdOrder desc limit 1;
     end
 $$
 
@@ -371,7 +371,7 @@ DELIMITER $$
     create procedure SP_FinalOrder(in intIdOrderUpdate int)
 
     begin
-        update tblorder set tblorder.intIdStateOrder=3 where tblorder.intIdOrder=intIdOrderUpdate;
+        update tblOrder set tblOrder.intIdStateOrder=3 where tblOrder.intIdOrder=intIdOrderUpdate;
     end
 
 $$
@@ -383,7 +383,7 @@ DELIMITER $$
     in intIdOrderP int)
     begin
 
-        insert into tblorderdetail(intQuantity,intTotal,intPriceProduct,intIdProduct,intIdOrder)
+        insert into tblOrderDetail(intQuantity,intTotal,intPriceProduct,intIdProduct,intIdOrder)
         values(intQuantityOrder,intTotalOrder,intPriceProduct,intIdProductOrder,intIdOrderP);
 
     end
@@ -393,11 +393,11 @@ DELIMITER $$
 create procedure SP_ListOrdes
 ()
 begin
- SELECT tblorder.intIdOrder,SUBSTRING_INDEX(tblorder.dtFechaInicio,' ',1) as 'dtFechaInicio',
-    concat(tbluser.strName,tbluser.strLastName) as 'strNameSeller',
-concat(tblcustomer.strName,tblcustomer.strLastName) as 'strNameCustomer' FROM tomaped.tblorder
-inner join tbluser on tbluser.intiduser=tblorder.intiduser
-inner join tblcustomer on tblcustomer.intIdCustomer=tblorder.intIdCustomer;
+ SELECT tblOrder.intIdOrder,SUBSTRING_INDEX(tblOrder.dtFechaInicio,' ',1) as 'dtFechaInicio',
+    concat(tblUser.strName,tblUser.strLastName) as 'strNameSeller',
+concat(tblCustomer.strName,tblCustomer.strLastName) as 'strNameCustomer' FROM tblOrder
+inner join tblUser on tblUser.intiduser=tblOrder.intiduser
+inner join tblCustomer on tblCustomer.intIdCustomer=tblOrder.intIdCustomer;
 End
 $$
 
@@ -406,8 +406,65 @@ DELIMITER $$
     create procedure SP_NroUserCustomerOrder()
     begin
 
-        select (select count(*) from tbluser) as 'NroUsers',(select count(*) from tblcustomer) as 'NroCustomers',
-(select count(*) from tblorder) as 'NroOrders';
+        select (select count(*) from tblUser) as 'NroUsers',(select count(*) from tblCustomer) as 'NroCustomers',
+(select count(*) from tblOrder) as 'NroOrders';
     end
 
 $$
+
+
+
+
+
+INSERT INTO `tblZone` (`intIdZone`, `strDescription`) VALUES
+(4, 'Occidente'),
+(6, 'Sur'),
+(12, 'Norte');
+
+INSERT INTO `tblCity` (`intIdCity`, `strDescription`, `intIdZone`) VALUES
+(24, 'Medellín', 4),
+(25, 'Cali', 6),
+(26, 'Bogota', 6);
+
+INSERT INTO `tblCustomer` (`intIdCustomer`, `strDocument`, `strName`, `strLastName`, `strEmail`, `strPhone`, `strAddress`, `intIdCity`) VALUES
+(2, '26529344', 'Juan Camilo', 'Chica Castro', 'juancamilo@gmail.com', '3113608269', 'Cll 116 # 64 D - 06', 24),
+(3, '123456', 'pablo', 'castro', 'pc@gmail.com', '3113608269', 'Cll 116 # 64 D - 06', 25);
+
+
+INSERT INTO `tblStateOrder` (`intIdStateOrder`, `strDescription`) VALUES
+(2, 'En proceso'),
+(3, 'Finalizado');
+
+
+INSERT INTO `tblTypeUser` (`intIdTypeUser`, `strDescription`) VALUES
+(1, 'Admin'),
+(2, 'Seller');
+
+
+INSERT INTO `tblUser` (`intIdUser`, `strDocument`, `strName`, `strLastName`, `strEmail`, `strPassword`, `strPhone`, `strAddress`, `intIdTypeUser`, `intIdZone`) VALUES
+(1, '1020480253', 'wilson herney', 'castro cabrera', 'wilsoncastro@gmail.com', '123456', '3113608269', 'cll ', 1, 6),
+(18, '4920307', 'marly esperanza', 'cabrera chavarro', 'm_cabrera@hotmail.com', '123456', '3113608269', 'Cll 116 # 64 D - 06', 2, 4),
+(20, '123456', 'jean paul', 'castro cabrera', 'jp@hotmail.com', '123456', '3113608269', 'Cll 116 # 64 d 06', 2, 4);
+
+
+
+
+INSERT INTO `tblOrder` (`intIdOrder`, `dtFechaInicio`, `intNumeroItems`, `strDescription`, `intIdCustomer`, `intIdUser`, `intIdStateOrder`) VALUES
+(102, '2020-11-09 00:39:56', 0, '', 2, 18, 3),
+(103, '2020-11-09 15:20:18', 0, '', 3, 20, 3),
+(104, '2020-11-09 15:21:31', 0, '', 2, 20, 2);
+
+INSERT INTO `tblProduct` (`intIdProduct`, `strDescription`, `strPrice`, `dtEntry`) VALUES
+('CA200', 'Barberia', 4000, '2020-11-09 15:17:29'),
+('CA280', 'Maquillaje', 2000, '2020-11-09 00:36:04'),
+('CA281', 'Maquillaje', 3400, '2020-11-09 00:37:02');
+
+INSERT INTO `tblOrderDetail` (`intIdOrderDetail`, `intQuantity`, `intTotal`, `intPriceProduct`, `intIdProduct`, `intIdOrder`) VALUES
+(14, 3, 6000, 2000, 'CA280', 102),
+(15, 4, 13600, 3400, 'CA281', 102),
+(16, 5, 20000, 4000, 'CA200', 103),
+(17, 10, 20000, 2000, 'CA280', 103);
+
+
+
+
